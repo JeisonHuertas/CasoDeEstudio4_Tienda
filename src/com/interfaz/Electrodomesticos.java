@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import com.mundo.CElectrodomesticos;
+import com.mundo.Producto;
 
 public class Electrodomesticos extends JPanel {
 	private JTextField txtValorVentaEstufa;
@@ -17,14 +18,14 @@ public class Electrodomesticos extends JPanel {
 	private JTextField txtCantidadNeveras;
 	private JTextField txtValorVentaLavadoras;
 	private JTextField txtCantidadLavadoras;
-	private Aplicacion principal;
+
 	
 	
 	/**
 	 * Create the panel.
 	 */
-	public Electrodomesticos(Aplicacion principal) {
-		this.principal = principal;
+	public Electrodomesticos() {
+
 		setLayout(null);
 		
 		JPanel panel_1_1 = new JPanel();
@@ -143,13 +144,13 @@ public class Electrodomesticos extends JPanel {
 		lblNewLabel_2_2_2.setBounds(247, 326, 78, 14);
 		add(lblNewLabel_2_2_2);
 	}
-	public void actualizar(CElectrodomesticos[] array) {
-		txtValorVentaEstufa.setText(formatearValorEntero(array[0].darValorVenta()));
-		txtValorVentaNeveras.setText(formatearValorEntero(array[1].darValorVenta()));
-		txtValorVentaLavadoras.setText(formatearValorEntero(array[2].darValorVenta()));
-		txtCantidadEstufas.setText(formatearValorEntero(array[0].darCantidad()));
-		txtCantidadNeveras.setText(formatearValorEntero(array[1].darCantidad()));
-		txtCantidadLavadoras.setText(formatearValorEntero(array[2].darCantidad()));
+	public void actualizar(Producto[] arrayElect) {
+		txtValorVentaEstufa.setText(formatearValorEntero(arrayElect[0].darValorVenta()));
+		txtValorVentaNeveras.setText(formatearValorEntero(arrayElect[1].darValorVenta()));
+		txtValorVentaLavadoras.setText(formatearValorEntero(arrayElect[2].darValorVenta()));
+		txtCantidadEstufas.setText(formatearValorEntero(arrayElect[0].darCantidad()));
+		txtCantidadNeveras.setText(formatearValorEntero(arrayElect[1].darCantidad()));
+		txtCantidadLavadoras.setText(formatearValorEntero(arrayElect[2].darCantidad()));
 		
 	}
 	private String formatearValorEntero(int valor) {

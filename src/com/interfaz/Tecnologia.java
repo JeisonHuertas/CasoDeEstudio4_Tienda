@@ -8,6 +8,7 @@ import javax.swing.SwingConstants;
 
 import com.mundo.CElectrodomesticos;
 import com.mundo.CTecnologia;
+import com.mundo.Producto;
 
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
@@ -19,14 +20,14 @@ public class Tecnologia extends JPanel {
 	private JTextField txtCantidadTelefonos;
 	private JTextField txtValorVentaCelulares;
 	private JTextField txtCantidadCelulares;
-	private Aplicacion principal;
+
 	
 
 	/**
 	 * Create the panel.
 	 */
-	public Tecnologia(Aplicacion principal) {
-		this.principal = principal;
+	public Tecnologia() {
+
 		setLayout(null);
 		
 		JPanel panel_1_1 = new JPanel();
@@ -146,13 +147,13 @@ public class Tecnologia extends JPanel {
 		add(txtCantidadCelulares);
 
 	}
-	public void actualizar(CTecnologia[] array) {
-		txtValorVentaTelevisores.setText(formatearValorEntero(array[0].darValorVenta()));
-		txtValorVentaTelefonos.setText(formatearValorEntero(array[1].darValorVenta()));
-		txtValorVentaCelulares.setText(formatearValorEntero(array[2].darValorVenta()));
-		txtCantidadTelevisores.setText(formatearValorEntero(array[0].darCantidad()));
-		txtCantidadTelefonos.setText(formatearValorEntero(array[1].darCantidad()));
-		txtCantidadCelulares.setText(formatearValorEntero(array[2].darCantidad()));
+	public void actualizar(Producto[] arrayTec) {
+		txtValorVentaTelevisores.setText(formatearValorEntero(arrayTec[0].darValorVenta()));
+		txtValorVentaTelefonos.setText(formatearValorEntero(arrayTec[1].darValorVenta()));
+		txtValorVentaCelulares.setText(formatearValorEntero(arrayTec[2].darValorVenta()));
+		txtCantidadTelevisores.setText(formatearValorEntero(arrayTec[0].darCantidad()));
+		txtCantidadTelefonos.setText(formatearValorEntero(arrayTec[1].darCantidad()));
+		txtCantidadCelulares.setText(formatearValorEntero(arrayTec[2].darCantidad()));
 	}
 	private String formatearValorEntero(int valor) {
 		return Integer.toString(valor);

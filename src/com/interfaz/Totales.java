@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import com.mundo.CDecoracion;
 import com.mundo.CElectrodomesticos;
 import com.mundo.CTecnologia;
+import com.mundo.Producto;
 
 public class Totales extends JPanel {
 	private JTextField txtTotalInversionRealizada;
@@ -22,10 +23,13 @@ public class Totales extends JPanel {
 	 * Create the panel.
 	 */
 	public Totales(Aplicacion principal) {
+		this();
 		this.principal = principal;
-		setLayout(null);
 		this.inversionTotal = 0;
 		this.numeroVentas = 0;
+	}
+	public Totales() {
+		setLayout(null);
 		JPanel panel_1_1 = new JPanel();
 		panel_1_1.setLayout(null);
 		panel_1_1.setBackground(new Color(173, 216, 230));
@@ -81,27 +85,21 @@ public class Totales extends JPanel {
 		txtNumeroVentas.setText(Integer.toString(numeroVentas));
 		txtDineroVentas.setText(Integer.toString(totalVentas));
 	}
-	public void modificarInversionTotal(CTecnologia[] arrayTec, CDecoracion[] arrayDeco, CElectrodomesticos[] arrayElect) {
-		int tInversionElectrodomesticos = 0;
-		int tInversionDecoracion = 0;
-		int tInversionTecnologia = 0;
+	public void modificarInversionTotal(Producto[][] producto, int cantidadAgregada, String seleccion) {
 		for (int i = 0; i<3; i++) {
-			tInversionDecoracion += arrayDeco[i].darValorInversion()*arrayDeco[i].darCantidad();
-			tInversionTecnologia += arrayTec[i].darValorInversion()*arrayTec[i].darCantidad();
-			tInversionElectrodomesticos += arrayElect[i].darValorInversion()*arrayElect[i].darCantidad();
+			for (int j=0; j<3; j++) {
+				if (seleccion == producto[i][j].darNombre()) {
+					this.inversionTotal += cantidadAgregada * producto[i][j].darValorInversion();
+				}
+				
+			}
 		}
-		inversionTotal = tInversionElectrodomesticos + tInversionDecoracion + tInversionTecnologia;
+
 	}
 	public void modificarNumeroVentas(int numeroVentas) {
 		this.numeroVentas +=  numeroVentas;
 	}
-	public void totalVentas(String clase,int producto,int cantidadVendida,CTecnologia[] arrayTec, CDecoracion[] arrayDeco, CElectrodomesticos[] arrayElect ) {
-		 if(clase == "Electrodomesticos" && arrayElect[producto].darCantidad() > 0 ) {
-			 this.totalVentas += cantidadVendida * arrayElect[producto].darValorVenta();
-		 }else if(clase == "Decoracion" && arrayDeco[producto].darCantidad() > 0) {
-			 this.totalVentas += cantidadVendida * arrayDeco[producto].darValorVenta();
-		 }else if(clase == "Tecnologia" && arrayTec[producto].darCantidad() > 0) {
-			 this.totalVentas += cantidadVendida * arrayTec[producto].darValorVenta();
-		 }
+	public void totalVentas(Producto[][] productos,int i,int j,int cantidadVendida ) { 
+		 this.totalVentas += cantidadVendida * productos[i][j].darValorVenta();
 	}
 }

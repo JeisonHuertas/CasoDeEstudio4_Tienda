@@ -1,3 +1,4 @@
+
 package com.interfaz;
 
 import javax.swing.JPanel;
@@ -12,6 +13,7 @@ import javax.swing.JTextField;
 import com.mundo.CDecoracion;
 import com.mundo.CElectrodomesticos;
 import com.mundo.CTecnologia;
+import com.mundo.Producto;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -32,7 +34,10 @@ public class Modificar extends JPanel {
 	 * Create the panel.
 	 */
 	public Modificar(Aplicacion principal) {
+		this();
 		this.principal = principal;
+	}
+	public Modificar() {
 		setLayout(null);
 		JPanel panel_1_1 = new JPanel();
 		panel_1_1.setLayout(null);
@@ -78,8 +83,10 @@ public class Modificar extends JPanel {
 		JButton btnModificar = new JButton("Modificar");
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				modificarPrecioDeVenta(principal.darTecnologia(), principal.darDecoracion(), principal.darElectrodomesticos());
-				principal.totales.modificarInversionTotal(principal.darTecnologia(), principal.darDecoracion(), principal.darElectrodomesticos());
+				String seleccionUsuario = (String)comboBoxModificar.getSelectedItem();
+				modificarPrecioDeVenta(principal.darProductos());
+				int cantidad = Integer.parseInt(txtCantidad.getText());
+				principal.calcularInversionTotal(cantidad, seleccionUsuario);
 				principal.actualizar();
 			}
 		});
@@ -144,7 +151,7 @@ public class Modificar extends JPanel {
 		JButton btnAgregar = new JButton("Agregar");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ventasRealizadas(principal.darTecnologia(), principal.darDecoracion(), principal.darElectrodomesticos());
+				ventasRealizadas(principal.darProductos());
 				principal.actualizar();
 			}
 		});
@@ -163,117 +170,43 @@ public class Modificar extends JPanel {
 		add(txtValorInversion);
 
 	}
-	public void modificarPrecioDeVenta(CTecnologia[] arrayTec, CDecoracion[] arrayDeco, CElectrodomesticos[] arrayElect) {
+	public void modificarPrecioDeVenta(Producto[][] producto) {
 		String seleccionUsuario = (String)comboBoxModificar.getSelectedItem();
 		int nuevoPrecio =Integer.parseInt(txtValorDeVenta.getText());
-		
-		
-		if(seleccionUsuario == "Neveras") {
-			modificar(nuevoPrecio,"Electrodomesticos",1,arrayTec,arrayDeco,arrayElect);
-		}else if(seleccionUsuario == "Lavadoras") {
-			modificar(nuevoPrecio,"Electrodomesticos",2,arrayTec,arrayDeco,arrayElect);			
-		}else if(seleccionUsuario == "Estufas") {
-			modificar(nuevoPrecio,"Electrodomesticos",0,arrayTec,arrayDeco,arrayElect);		
-		}else if(seleccionUsuario == "Televisores") {
-			modificar(nuevoPrecio,"Tecnologia",0,arrayTec,arrayDeco,arrayElect);		
-		}else if(seleccionUsuario == "Telefonos") {
-			modificar(nuevoPrecio,"Tecnologia",1,arrayTec,arrayDeco,arrayElect);		
-		}else if(seleccionUsuario == "Celulares") {
-			modificar(nuevoPrecio,"Tecnologia",2,arrayTec,arrayDeco,arrayElect);		
-		}else if(seleccionUsuario == "Cuadros") {
-			modificar(nuevoPrecio,"Decoracion",0,arrayTec,arrayDeco,arrayElect);		
-		}else if(seleccionUsuario == "Mesas") {
-			modificar(nuevoPrecio,"Decoracion",1,arrayTec,arrayDeco,arrayElect);		
-		}else if(seleccionUsuario == "Relojes") {
-			modificar(nuevoPrecio,"Decoracion",2,arrayTec,arrayDeco,arrayElect);
-		}
-	}
-	 public void modificar(int precio,String clase,int producto,CTecnologia[] arrayTec, CDecoracion[] arrayDeco, CElectrodomesticos[] arrayElect ) {
 		 int cantidad = Integer.parseInt(txtCantidad.getText());
 		 int valorInversion = Integer.parseInt(txtValorInversion.getText());
-		 if (precio < precioMinimo(producto,clase, arrayTec, arrayDeco, arrayElect)) {
-			 JOptionPane.showMessageDialog(null, "El valor que desea cambiar no cumple con los requisitos", "warning", JOptionPane.WARNING_MESSAGE);
-		 }else {
-			 if(clase == "Electrodomesticos") {
-				 arrayElect[producto].modificarValorInversion(valorInversion);
-				 if (precio < precioMinimo(producto,clase, arrayTec, arrayDeco, arrayElect)) {
-					 JOptionPane.showMessageDialog(null, "El valor que desea cambiar no cumple con los requisitos", "warning", JOptionPane.WARNING_MESSAGE);
-				 }
-				 arrayElect[producto].aumentarCantidad(cantidad);
-				 arrayElect[producto].modificarValorDeVenta(precio);
-			 }else if(clase == "Decoracion") {
-				 arrayDeco[producto].modificarValorInversion(valorInversion);
-				 if (precio < precioMinimo(producto,clase, arrayTec, arrayDeco, arrayElect)) {
-					 JOptionPane.showMessageDialog(null, "El valor que desea cambiar no cumple con los requisitos", "warning", JOptionPane.WARNING_MESSAGE);
-				 }
-				 arrayDeco[producto].aumentarCantidad(cantidad);
-				 arrayDeco[producto].modificarValorDeVenta(precio);
-			 }else if(clase == "Tecnologia") {
-				 arrayTec[producto].modificarValorInversion(valorInversion);
-				 if (precio < precioMinimo(producto,clase, arrayTec, arrayDeco, arrayElect)) {
-					 JOptionPane.showMessageDialog(null, "El valor que desea cambiar no cumple con los requisitos", "warning", JOptionPane.WARNING_MESSAGE);
-				 }
-				 arrayTec[producto].aumentarCantidad(cantidad);
-				 arrayTec[producto].modificarValorDeVenta(precio);
-			 }
-		 }
-		 
-	 }
-	 public int precioMinimo(int producto,String clase,CTecnologia[] arrayTec, CDecoracion[] arrayDeco, CElectrodomesticos[] arrayElect) {
-		 int precioMin = 0;
-		 if(clase == "Electrodomesticos") {
-			 precioMin = arrayElect[producto].darValorInversion()+(arrayElect[producto].darValorInversion()*2/100);
-		 }else if(clase == "Decoracion") {
-			 precioMin = arrayDeco[producto].darValorInversion()+(arrayElect[producto].darValorInversion()*2/100);
-		 }else if(clase == "Tecnologia") {
-			 precioMin = arrayTec[producto].darValorInversion()+(arrayElect[producto].darValorInversion()*2/100);
-		 }
-		 return precioMin;
-	 }
-	 public void ventasRealizadas(CTecnologia[] arrayTec, CDecoracion[] arrayDeco, CElectrodomesticos[] arrayElect) {
-		 String seleccionUsuario = (String)comboBoxVender.getSelectedItem();
-		 int cantidadVendida = Integer.parseInt(txtCantidadVendida.getText());
-		 if(seleccionUsuario == "Neveras") {
-				modificarCantidad("Electrodomesticos",1,arrayTec,arrayDeco,arrayElect);
-				principal.totales.totalVentas("Electrodomesticos", 1, cantidadVendida, arrayTec, arrayDeco, arrayElect);
-			}else if(seleccionUsuario == "Lavadoras") {
-				modificarCantidad("Electrodomesticos",2,arrayTec,arrayDeco,arrayElect);
-				principal.totales.totalVentas("Electrodomesticos", 2, cantidadVendida, arrayTec, arrayDeco, arrayElect);
-			}else if(seleccionUsuario == "Estufas") {
-				modificarCantidad("Electrodomesticos",0,arrayTec,arrayDeco,arrayElect);
-				principal.totales.totalVentas("Electrodomesticos", 0, cantidadVendida, arrayTec, arrayDeco, arrayElect);
-			}else if(seleccionUsuario == "Televisores") {
-				modificarCantidad("Tecnologia",0,arrayTec,arrayDeco,arrayElect);		
-				principal.totales.totalVentas("Tecnologia", 0, cantidadVendida, arrayTec, arrayDeco, arrayElect);
-			}else if(seleccionUsuario == "Telefonos") {
-				modificarCantidad("Tecnologia",1,arrayTec,arrayDeco,arrayElect);		
-				principal.totales.totalVentas("Tecnologia", 1, cantidadVendida, arrayTec, arrayDeco, arrayElect);
-			}else if(seleccionUsuario == "Celulares") {
-				modificarCantidad("Tecnologia",2,arrayTec,arrayDeco,arrayElect);		
-				principal.totales.totalVentas("Tecnologia", 2, cantidadVendida, arrayTec, arrayDeco, arrayElect);
-			}else if(seleccionUsuario == "Cuadros") {
-				modificarCantidad("Decoracion",0,arrayTec,arrayDeco,arrayElect);		
-				principal.totales.totalVentas("Decoracion", 0, cantidadVendida, arrayTec, arrayDeco, arrayElect);
-			}else if(seleccionUsuario == "Mesas") {
-				modificarCantidad("Decoracion",1,arrayTec,arrayDeco,arrayElect);	
-				principal.totales.totalVentas("Decoracion", 1, cantidadVendida, arrayTec, arrayDeco, arrayElect);
-			}else if(seleccionUsuario == "Relojes") {
-				modificarCantidad("Decoracion",2,arrayTec,arrayDeco,arrayElect);
-				principal.totales.totalVentas("Decoracion", 2, cantidadVendida, arrayTec, arrayDeco, arrayElect);
-
+		
+		for(int i=0; i<producto.length; i++) {
+			for(int j=0; j<producto[i].length; j++) {
+				if (seleccionUsuario == producto[i][j].darNombre()) {
+					if (nuevoPrecio > producto[i][j].darValorInversion()+(producto[i][j].darValorInversion()*2/100 ) && nuevoPrecio > valorInversion) {
+						producto[i][j].modificarValorInversion(valorInversion);
+						producto[i][j].aumentarCantidad(cantidad);
+						 producto[i][j].modificarValorDeVenta(nuevoPrecio);
+					}else {
+						JOptionPane.showMessageDialog(null, "El valor que desea cambiar no cumple con los requisitos", "warning", JOptionPane.WARNING_MESSAGE);
+					}
+					
+				}
 			}
 		}
-	 public void modificarCantidad(String clase,int producto,CTecnologia[] arrayTec, CDecoracion[] arrayDeco, CElectrodomesticos[] arrayElect ) {
+	}
+	public void ventasRealizadas(Producto[][] producto) {
+		 String seleccionUsuario = (String)comboBoxVender.getSelectedItem();
 		 int cantidadVendida = Integer.parseInt(txtCantidadVendida.getText());
-			 if(clase == "Electrodomesticos" && arrayElect[producto].darCantidad() > 0 ) {
-				 arrayElect[producto].disminuirCantidad(cantidadVendida);
-			 }else if(clase == "Decoracion" && arrayDeco[producto].darCantidad() > 0) {
-				 arrayDeco[producto].disminuirCantidad(cantidadVendida);
+		 
+		 for(int i=0; i<producto.length; i++) {
+				for(int j=0; j<producto[i].length; j++) {
+					if (seleccionUsuario == producto[i][j].darNombre()) {
+						if (producto[i][j].darCantidad() > 0 && producto[i][j].darCantidad() > cantidadVendida  ) {
+							producto[i][j].disminuirCantidad(cantidadVendida);
+							principal.modificarNumeroVentas(producto,i,j,cantidadVendida);
+						}else {
+							JOptionPane.showMessageDialog(null, "No tiene suficientes productos", "warning", JOptionPane.WARNING_MESSAGE);
+						}
+					}
+				}
+			}
+	}
 
-			 }else if(clase == "Tecnologia" && arrayTec[producto].darCantidad() > 0) {
-				 arrayTec[producto].disminuirCantidad(cantidadVendida);
-			 }
-			 principal.totales.modificarNumeroVentas(cantidadVendida);
-		 }
-	
 }

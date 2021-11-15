@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import com.mundo.CDecoracion;
 import com.mundo.CElectrodomesticos;
 import com.mundo.CTecnologia;
+import com.mundo.Producto;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -26,17 +27,14 @@ public class Aplicacion extends JFrame {
 	private Tecnologia tecnologia;
 	private Decoracion decoracion;
 	private Modificar modificar;
-	public Totales totales;
-	// Asociaciones
-	private CElectrodomesticos aElectrodomesticos;
-	private CDecoracion aDecoracion;
-	private CTecnologia aTecnologia;
+	private Totales totales;
 	//constante => tamaño del arreglo
 	private int NUMERO_PRODUCTOS = 3;
 	//Arreglos
-	private CTecnologia[] arrayTec;
-	private CDecoracion[] arrayDeco;
-	private CElectrodomesticos[] arrayElect;
+	private Producto[] arrayTec;
+	private Producto[] arrayDeco;
+	private Producto[] arrayElect;
+	private Producto[][] productos;
 	
 	/**
 	 * Launch the application.
@@ -62,18 +60,23 @@ public class Aplicacion extends JFrame {
 		arrayTec = new CTecnologia[NUMERO_PRODUCTOS ];
 		arrayDeco = new CDecoracion[NUMERO_PRODUCTOS ];
 		arrayElect = new CElectrodomesticos[NUMERO_PRODUCTOS ];
+		productos = new Producto[NUMERO_PRODUCTOS][];
+
+		arrayTec[0] = new CTecnologia("Televisores",0,0,0,110);
+		arrayTec[1] = new CTecnologia("Telefonos",0,0,0,111);
+		arrayTec[2] = new CTecnologia("Celulares",0,0,0,112);
 		
-		arrayTec[0] = new CTecnologia(0,0,0,110);
-		arrayTec[1] = new CTecnologia(0,0,0,111);
-		arrayTec[2] = new CTecnologia(0,0,0,112);
+		arrayDeco[0] = new CDecoracion("Cuadros",0,0,0,113);
+		arrayDeco[1] = new CDecoracion("Mesas",0,0,0,114);
+		arrayDeco[2] = new CDecoracion("Relojes",0,0,0,115);
 		
-		arrayDeco[0] = new CDecoracion(0,0,0,113);
-		arrayDeco[1] = new CDecoracion(0,0,0,114);
-		arrayDeco[2] = new CDecoracion(0,0,0,115);
+		arrayElect[0] = new CElectrodomesticos("Estufas",0,0,0,116);
+		arrayElect[1] = new CElectrodomesticos("Neveras",0,0,0,117);
+		arrayElect[2] = new CElectrodomesticos("Lavadoras",0,0,0,118);
 		
-		arrayElect[0] = new CElectrodomesticos(0,0,0,116);
-		arrayElect[1] = new CElectrodomesticos(0,0,0,117);
-		arrayElect[2] = new CElectrodomesticos(0,0,0,118);
+		productos[0] = arrayTec;
+		productos[1] = arrayDeco;
+		productos[2]= arrayElect;
 		
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,14 +92,14 @@ public class Aplicacion extends JFrame {
 		panelOpciones.setBounds(0, 0, 284, 543);
 		contentPane.add(panelOpciones);
 		
-		electrodomesticos = new Electrodomesticos(this);
+		electrodomesticos = new Electrodomesticos();
 		electrodomesticos.setBounds(282, 0, 746, 543);
 		contentPane.add(electrodomesticos);
 		
 		//Instancias de los paneles
 		
-		tecnologia = new Tecnologia(this);
-		decoracion = new Decoracion(this);
+		tecnologia = new Tecnologia();
+		decoracion = new Decoracion();
 		modificar = new Modificar(this);
 		totales = new Totales(this);
 		
@@ -214,26 +217,25 @@ public class Aplicacion extends JFrame {
 		btnTotales.setBackground(new Color(0, 102, 204));
 		btnTotales.setBounds(0, 427, 284, 56);
 		panelOpciones.add(btnTotales);
-		electrodomesticos.actualizar(arrayElect);
-		tecnologia.actualizar(arrayTec);
-		decoracion.actualizar(arrayDeco);
+		
+		actualizar();
 	}
 	
-	public CElectrodomesticos[] darElectrodomesticos() {
-		return arrayElect;
+	public Producto[][] darProductos() {
+		return productos;
 	}
-	public CTecnologia[] darTecnologia() {
-		return arrayTec;
-	}
-	public CDecoracion[] darDecoracion() {
-		return arrayDeco;
-	}
-	
 	public void actualizar() {
 		tecnologia.actualizar(arrayTec);
 		electrodomesticos.actualizar(arrayElect);
 		decoracion.actualizar(arrayDeco);
 		totales.actualizar();
+	}
+	public void calcularInversionTotal( int cantidadAgregada, String seleccion) {
+		totales.modificarInversionTotal(productos, cantidadAgregada, seleccion);
+	}
+	public void modificarNumeroVentas (Producto[][] productos,int i,int j,int cantidadVendida ) {
+		totales.modificarNumeroVentas(cantidadVendida);
+		totales.totalVentas(productos, i, j, cantidadVendida);
 	}
 	
 }
